@@ -17,4 +17,15 @@ install:
 	python setup.py build
 	python setup.py bdist
 	sudo python setup.py install
-	sudo python -m yumcache.main setupDaemon
+	sudo cp yumcache.service /usr/lib/systemd/system/yumcache.service
+	test -e /etc/yumcache.config || sudo cp yumcache.config /etc/yumcache.config
+	sudo systemctl enable yumcache
+	-sudo systemctl stop yumcache
+	sudo systemctl start yumcache
+
+uninstall:
+	sudo systemctl stop yumcache
+	sudo systemctl disable yumcache
+	sudo rm -f /usr/lib/systemd/system/yumcache.service
+	sudo pip uninstall yumcache
+	echo "CONSIDER ERASING /var/lib/yumcache, /etc/yumcache.config"

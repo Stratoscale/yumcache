@@ -1,0 +1,10 @@
+[Unit]
+Description=YumCache Dumb HTTP Proxy Cache
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python -m yumcache.main --bogusURLsFile=/etc/yumcache.config
+
+[Install]
+WantedBy=multi-user.target
