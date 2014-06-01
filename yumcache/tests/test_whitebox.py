@@ -39,6 +39,13 @@ class Test(unittest.TestCase):
         finally:
             connection.close()
 
+    def downloadBogus(self, path):
+        connection = urllib2.urlopen("http://localhost:%d/%s" % (yumcachewrapper.PORT, path))
+        try:
+            return connection.read()
+        finally:
+            connection.close()
+
     def test_FetchOneFile(self):
         self.write("yuvu", "the contents")
         self.assertEquals(self.download("yuvu"), "the contents")
@@ -55,6 +62,14 @@ class Test(unittest.TestCase):
         self.server.done()
         self.server = None
         self.assertEquals(self.download("yuvu"), "the contents")
+
+    def test_BogusURL(self):
+        self.write("bogus1/aFile", "some contents")
+        self.assertEquals(self.downloadBogus("www.bogus1.com/aFile"), "some contents")
+
+    def test_BogusURLSecondMirrorSelected(self):
+        self.write("bogus2/aFile", "some contents")
+        self.assertEquals(self.downloadBogus("www.bogus2.com/aFile"), "some contents")
 
 
 if __name__ == '__main__':

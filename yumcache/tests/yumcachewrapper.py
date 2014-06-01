@@ -3,6 +3,7 @@ import subprocess
 import shutil
 import time
 import socket
+from yumcache.tests import fakeserver
 
 PORT = 10701
 
@@ -11,7 +12,9 @@ class YumCacheWrapper:
     def __init__(self):
         self._dir = tempfile.mkdtemp()
         self._popen = subprocess.Popen(
-            ["python", "yumcache/main.py", "--storage=" + self._dir, "--port=" + str(PORT)],
+            ["python", "yumcache/main.py", "--storage=" + self._dir, "--port=" + str(PORT),
+                "--bogusURL=www.bogus1.com::localhost:%d/bogus1" % fakeserver.PORT,
+                "--bogusURL=www.bogus2.com::localhost:1/iDontExist::localhost:%d/bogus2" % fakeserver.PORT],
             close_fds=True)
         self._waitToComeOnline()
 

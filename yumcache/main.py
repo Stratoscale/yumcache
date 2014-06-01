@@ -18,12 +18,31 @@ def main(args):
 
 
 def _parseBogusURLs(args):
+    result = _parseBogusURLsFromFile(args)
+    result.update(_parseBogusURLsArguments(args))
+    return result
+
+
+def _parseBogusURLsArguments(args):
     if args.bogusURL is None:
         return dict()
     result = dict()
     for bogusURLArgument in args.bogusURL:
         parts = bogusURLArgument.split("::")
         result[parts[0]] = parts[1:]
+    return result
+
+
+def _parseBogusURLsFromFile(args):
+    if args.bogusURLsFile is None:
+        return dict()
+    result = dict()
+    with open(args.bogusURLsFile) as f:
+        for line in f.readlines():
+            if line.startswith("#"):
+                continue
+            parts = line.strip().split("::")
+            result[parts[0]] = parts[1:]
     return result
 
 
@@ -34,6 +53,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--port", type=int, default=1012)
     parser.add_argument("--storage", default="/var/lib/yumcache")
-    parser.add_argument("--bogusURL", action="append", help="Example: www.idontexist.com::localhost:8080/firstMirror::10.0.0.1/moreMirrors")
+    parser.add_argument(
+        "--bogusURL", action="append",
+        help="Example: www.idontexist.com::localhost:8080/firstMirror::10.0.0.1/moreMirrors")
+    parser.add_argument("--bogusURLsFile")
     args = parser.parse_args()
     main(args)

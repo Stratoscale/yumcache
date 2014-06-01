@@ -2,7 +2,8 @@ import logging
 import re
 
 
-class NoMoreRequests( Exception ): pass
+class NoMoreRequests(Exception):
+    pass
 
 
 class Request:
@@ -33,24 +34,24 @@ class Request:
             headers += line
             if line.strip() == "":
                 break
-        match = re.search( r"\nrange:\s*bytes=(\d+)-(\d+)\r\n", "\r\n" + headers, re.IGNORECASE )
+        match = re.search(r"\nrange:\s*bytes=(\d+)-(\d+)\r\n", "\r\n" + headers, re.IGNORECASE)
         if match is None:
             range = None
         else:
-            range = int( match.group( 1 ) ), int( match.group( 2 ) )
+            range = int(match.group(1)), int(match.group(2))
         return action, path, range
 
-    def _receiveRequestLine( self ):
+    def _receiveRequestLine(self):
         line = self._receiveLine()
-        logging.info( "Received Request line %s", ( line, ) )
-        action, path = re.search( r"^(\w+) (.*) HTTP/.+$", line.strip() ).groups()
-        return action, path.replace( "//", "/" )
+        logging.info("Received Request line %s", (line,))
+        action, path = re.search(r"^(\w+) (.*) HTTP/.+$", line.strip()).groups()
+        return action, path.replace("//", "/")
 
-    def _receiveLine( self ):
+    def _receiveLine(self):
         line = ""
-        while not line.endswith( "\n" ):
-            data = self._connection.recv( 1 )
+        while not line.endswith("\n"):
+            data = self._connection.recv(1)
             if data == "":
-                raise NoMoreRequests( "No More Requests" )
+                raise NoMoreRequests("No More Requests")
             line += data
         return line

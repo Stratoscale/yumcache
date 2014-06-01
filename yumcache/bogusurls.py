@@ -18,7 +18,7 @@ class BogusURLs:
         mirrorPath = mirror[len(realHostname):]
         assert pathInHost.startswith("/")
         assert len(mirrorPath) == 0 or mirrorPath.startswith("/")
-        return realHostname + mirrorPath + pathInHost
+        return realHostname, mirrorPath + pathInHost
 
     def _selectedRelevant(self, hostname):
         if hostname not in self._selected:

@@ -37,10 +37,10 @@ class ObjectStore:
             f.write(str(count))
 
     def _rootedPath(self, path):
-        return os.path.join(self._root, path.strip( '/' ) + "_response" )
+        return os.path.join(self._root, path.strip('/') + "_response")
 
     def _notFoundPath(self, path):
-        return os.path.join(self._root, path.strip( '/' ) + "_notFound" )
+        return os.path.join(self._root, path.strip('/') + "_notFound")
 
     def _mkdirFor(self, path):
         dirname = os.path.dirname(path)
