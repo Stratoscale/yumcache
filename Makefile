@@ -13,7 +13,7 @@ whiteboxtest:
 	PYTHONPATH=. python -m unittest yumcache.tests.test_whitebox
 
 install:
-	-sudo pip uninstall yumcache
+	-yes | sudo pip uninstall yumcache
 	python setup.py build
 	python setup.py bdist
 	sudo python setup.py install
@@ -24,8 +24,8 @@ install:
 	sudo systemctl start yumcache
 
 uninstall:
-	sudo systemctl stop yumcache
-	sudo systemctl disable yumcache
-	sudo rm -f /usr/lib/systemd/system/yumcache.service
-	sudo pip uninstall yumcache
+	-sudo systemctl stop yumcache
+	-sudo systemctl disable yumcache
+	-sudo rm -f /usr/lib/systemd/system/yumcache.service
+	-yes | sudo pip uninstall yumcache
 	echo "CONSIDER ERASING /var/lib/yumcache, /etc/yumcache.config"
