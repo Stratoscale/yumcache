@@ -16,6 +16,7 @@ install:
 	-yes | sudo pip uninstall yumcache
 	python setup.py build
 	python setup.py bdist
+	python setup.py bdist_egg
 	sudo python setup.py install
 	sudo cp yumcache.service /usr/lib/systemd/system/yumcache.service
 	test -e /etc/yumcache.config || sudo cp yumcache.config /etc/yumcache.config
