@@ -1,5 +1,6 @@
 import logging
 import re
+import urllib
 
 
 class NoMoreRequests(Exception):
@@ -21,10 +22,13 @@ class Request:
         return self._range
 
     def hostname(self):
+        return urllib.unquote(self._rawHostname())
+
+    def _rawHostname(self):
         return self._path.split("/")[1]
 
     def pathInHost(self):
-        return self._path[len("/") + len(self.hostname()):]
+        return self._path[len("/") + len(self._rawHostname()):]
 
     def _receiveRequest(self):
         action, path = self._receiveRequestLine()
